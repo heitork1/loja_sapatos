@@ -23,8 +23,7 @@ CREATE TABLE sede (
     nome_sede   VARCHAR(100) NOT NULL
 );
 
--- ESTOQUE
--- (relacionamento "Controle" 1:1 obrigatório com Filial)
+-- ESTOQUE - relacionamento controle 1:1 obrigatório com Filial
 CREATE TABLE estoque (
     id_estoque          SERIAL PRIMARY KEY,
     quantidade_minima   INTEGER NOT NULL DEFAULT 0 CHECK (quantidade_minima >= 0)
@@ -129,7 +128,7 @@ CREATE TABLE composicao (
 );
 
 
--- TRANSFERENCIA - movimentação de produto para uma filial)
+-- TRANSFERENCIA - movimentação de produto para uma filial
 CREATE TABLE transferencia (
     id_filial           INTEGER NOT NULL REFERENCES filial(id_filial),
     codigo              INTEGER NOT NULL REFERENCES produto(codigo),
