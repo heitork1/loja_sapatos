@@ -168,3 +168,7 @@ CREATE INDEX idx_venda_funcionario ON venda(id_funcionario);
 CREATE INDEX idx_produto_modelo    ON produto(id_modelo);
 CREATE INDEX idx_solicitacao_forn  ON solicitacao(razao_social);
 CREATE INDEX idx_funcionario_fil   ON funcionario(id_filial);
+
+ALTER TABLE cliente ADD COLUMN senha VARCHAR(20) NOT NULL DEFAULT '123456';
+
+ALTER TABLE funcionarios ADD COLUMN senha VARCHAR(20) NOT NULL DEFAULT 'admin';
