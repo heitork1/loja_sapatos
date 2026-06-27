@@ -171,4 +171,4 @@ CREATE INDEX idx_funcionario_fil   ON funcionario(id_filial);
 
 ALTER TABLE cliente ADD COLUMN senha VARCHAR(20) NOT NULL DEFAULT '123456';
 
-ALTER TABLE funcionarios ADD COLUMN senha VARCHAR(20) NOT NULL DEFAULT 'admin';
+ALTER TABLE funcionario ADD COLUMN senha VARCHAR(20) NOT NULL DEFAULT 'admin';
