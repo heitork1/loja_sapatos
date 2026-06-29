@@ -1,0 +1,25 @@
+package com.lojasapatos.model;
+
+public class Estoque {
+    private Integer idEstoque;
+    private Integer quantidadeMinima;
+
+    public Integer getIdEstoque() {
+        return idEstoque;
+    }
+
+    public void setIdEstoque(Integer idEstoque) {
+        this.idEstoque = idEstoque;
+    }
+
+    public Integer getQuantidadeMinima() {
+        return quantidadeMinima;
+    }
+
+    public void setQuantidadeMinima(Integer quantidadeMinima) {
+        this.quantidadeMinima = quantidadeMinima;
+    }
+
+
+    public Estoque() {}
+}
