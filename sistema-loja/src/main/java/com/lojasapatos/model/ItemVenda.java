@@ -4,7 +4,7 @@ import java.math.BigDecimal;
 
 public class ItemVenda {
     private Integer idVenda;
-    private Integer codigo;
+    private Integer codigo; // código do produto
     private Integer quantidade;
     private BigDecimal precoUnitario;
 
