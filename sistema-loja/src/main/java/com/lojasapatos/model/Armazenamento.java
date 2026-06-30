@@ -36,4 +36,9 @@ public class Armazenamento {
     public void setQuantidade(Integer quantidade) {
         this.quantidade = quantidade;
     }
+    
+    @Override
+    public String toString() {
+        return "Armazenamento{idEstoque=" + idEstoque + ", codigo=" + codigo + ", quantidade=" + quantidade + "}";
+    }
 }
