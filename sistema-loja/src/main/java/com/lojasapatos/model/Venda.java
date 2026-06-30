@@ -5,6 +5,15 @@ public class Venda {
     private String formaPagamento;
     private Integer idFilial;
     private Integer idFuncionario;
+    private Integer numParcelas;
+
+    public Venda(Integer idVenda, String formaPagamento, Integer idFilial, Integer idFuncionario, Integer numParcelas) {
+        this.idVenda = idVenda;
+        this.formaPagamento = formaPagamento;
+        this.idFilial = idFilial;
+        this.idFuncionario = idFuncionario;
+        this.numParcelas = numParcelas;
+    }
 
     public Integer getIdVenda() {
         return idVenda;

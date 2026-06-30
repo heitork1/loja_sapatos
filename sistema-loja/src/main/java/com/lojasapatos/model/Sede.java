@@ -3,6 +3,11 @@ package com.lojasapatos.model;
 public class Sede {
     private Integer idSede;
     private String nomeSede;
+    
+    public Sede(Integer idSede, String nomeSede) {
+        this.idSede = idSede;
+        this.nomeSede = nomeSede;
+    }
 
     public Integer getIdSede() {
         return idSede;
@@ -20,5 +25,5 @@ public class Sede {
         this.nomeSede = nomeSede;
     }
 
-    public Sede() {}
+    
 }

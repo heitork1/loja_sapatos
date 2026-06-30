@@ -8,6 +8,15 @@ public class Produto {
     private Double preco; // Double é ótimo para dinheiro na faculdade
     private Integer idModelo; // Chave Estrangeira
 
+    public Produto(Integer codigo, String marca, String categoria, String publicoAlvo, Double preco, Integer idModelo) {
+        this.codigo = codigo;
+        this.marca = marca;
+        this.categoria = categoria;
+        this.publicoAlvo = publicoAlvo;
+        this.preco = preco;
+        this.idModelo = idModelo;
+    }
+
     public Integer getCodigo() {
         return codigo;
     }

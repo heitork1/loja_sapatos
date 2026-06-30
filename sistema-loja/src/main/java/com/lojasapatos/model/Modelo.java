@@ -3,8 +3,15 @@ package com.lojasapatos.model;
 public class Modelo {
     private Integer codigo;
     private String cor;
-    private Integer numero; // Tamanho do sapato (ex: 40, 41)
+    private Integer numero; //do calçado
     private String categoriaModelo;
+
+    public Modelo(Integer codigo, String cor, Integer numero, String categoriaModelo) {
+        this.codigo = codigo;
+        this.cor = cor;
+        this.numero = numero;
+        this.categoriaModelo = categoriaModelo;
+    }
 
     public Integer getCodigo() {
         return codigo;

@@ -4,6 +4,11 @@ public class Estoque {
     private Integer idEstoque;
     private Integer quantidadeMinima;
 
+    public Estoque(Integer idEstoque, Integer quantidadeMinima) {
+        this.idEstoque = idEstoque;
+        this.quantidadeMinima = quantidadeMinima;
+    }
+
     public Integer getIdEstoque() {
         return idEstoque;
     }

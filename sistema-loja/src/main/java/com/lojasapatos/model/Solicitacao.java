@@ -11,7 +11,16 @@ public class Solicitacao {
     private Integer codigoProduto;        // FK
     private Integer idSede;               // FK
 
-    public Solicitacao() {}
+    public Solicitacao(Integer idSolicitacao, String status, Double custo, LocalDate dataEntrega,
+           Integer idSede, String razaoSocialFornecedor, Integer codigoProduto ) {
+        this.idSolicitacao = idSolicitacao;
+        this.status = status;
+        this.custo = custo;
+        this.dataEntrega = dataEntrega;
+        this.idSede = idSede;
+        this.razaoSocialFornecedor = razaoSocialFornecedor;
+        this.codigoProduto = codigoProduto;
+    }
 
     public Integer getIdSolicitacao() {
         return idSolicitacao;

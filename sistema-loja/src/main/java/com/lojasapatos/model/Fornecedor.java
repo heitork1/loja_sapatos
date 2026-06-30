@@ -5,6 +5,14 @@ public class Fornecedor {
     private String cnpj;
     private String contato;
 
+
+    public Fornecedor(String razaoSocial, String cnpj, String contato) {
+        this.razaoSocial = razaoSocial;
+        this.cnpj = cnpj;
+        this.contato = contato; 
+    }
+
+
     public String getRazaoSocial() {
         return razaoSocial;
     }
@@ -29,5 +37,4 @@ public class Fornecedor {
         this.contato = contato;
     }
 
-    public Fornecedor() {}
 }

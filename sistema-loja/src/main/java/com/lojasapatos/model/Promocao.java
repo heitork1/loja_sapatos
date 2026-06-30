@@ -6,6 +6,13 @@ public class Promocao {
     private String nome;
     private String periodoVigencia;
 
+    public Promocao(Integer idPromocao, String categorias, String nome, String periodoVigencia) {
+        this.idPromocao = idPromocao;
+        this.categorias = categorias;
+        this.nome = nome;
+        this.periodoVigencia = periodoVigencia;
+    }
+
     public Integer getIdPromocao() {
         return idPromocao;
     }

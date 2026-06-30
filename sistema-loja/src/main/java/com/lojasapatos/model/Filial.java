@@ -5,7 +5,11 @@ public class Filial {
     private Integer idEstoque; // FK
     private Integer idSede;    // FK
 
-    public Filial() {}
+    public Filial(Integer idFilial, Integer idEstoque, Integer idSede) {
+        this.idFilial = idFilial;
+        this.idEstoque = idEstoque;
+        this.idSede = idSede;
+    }
 
     public Integer getIdFilial() {
         return idFilial;

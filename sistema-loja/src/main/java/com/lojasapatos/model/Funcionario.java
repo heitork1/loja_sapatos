@@ -10,6 +10,16 @@ public class Funcionario {
     private LocalDate dataAdmissao;
     private Integer idFilial;
 
+    public Funcionario(Integer codigo, String cpf, String funcao, String nome, LocalDate dataAdmissao,
+            Integer idFilial) {
+        this.codigo = codigo;
+        this.cpf = cpf;
+        this.funcao = funcao;
+        this.nome = nome;
+        this.dataAdmissao = dataAdmissao;
+        this.idFilial = idFilial;
+    }
+
     public Integer getCodigo() {
         return codigo;
     }

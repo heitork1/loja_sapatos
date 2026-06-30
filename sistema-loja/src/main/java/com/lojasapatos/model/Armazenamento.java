@@ -5,6 +5,12 @@ public class Armazenamento {
     private Integer codigoProduto;
     private Integer quantidade; // Quantos sapatos tem no estoque
 
+    public Armazenamento(Integer idEstoque, Integer codigoProduto, Integer quantidade) {
+        this.idEstoque = idEstoque;
+        this.codigoProduto = codigoProduto;
+        this.quantidade = quantidade;
+    }
+
     public Armazenamento() {}
 
     public Integer getIdEstoque() {
