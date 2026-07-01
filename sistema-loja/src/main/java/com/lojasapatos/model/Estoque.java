@@ -4,6 +4,7 @@ public class Estoque {
     private Integer idEstoque;
     private Integer quantidadeMinima;
 
+    public Estoque(Integer quantidadeMinima) { this.quantidadeMinima = quantidadeMinima; }
     public Estoque(Integer idEstoque, Integer quantidadeMinima) {
         this.idEstoque = idEstoque;
         this.quantidadeMinima = quantidadeMinima;
@@ -25,6 +26,10 @@ public class Estoque {
         this.quantidadeMinima = quantidadeMinima;
     }
 
-
+    @Override
+    public String toString() {
+        return "Estoque{idEstoque=" + idEstoque + ", quantidadeMinima=" + quantidadeMinima + "}";
+    }
+    
     public Estoque() {}
 }
