@@ -9,37 +9,64 @@ import java.util.List;
 import com.lojasapatos.model.Modelo;
 
 public class ModeloDAO {
-    public void salvar(Modelo m) {
-        String sql = "INSERT INTO modelo (cor, numero, categoria_modelo) VALUES (?, ?, ?)";
-        try (Connection conn = Conexao.getConexao(); PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setString(1, m.getCor());
-            stmt.setInt(2, m.getNumero());
-            stmt.setString(3, m.getCategoriaModelo());
-            stmt.executeUpdate();
-        } catch (SQLException e) { System.err.println("Erro: " + e.getMessage()); }
+    public void inserir(Modelo m) throws SQLException {
+        String sql = "INSERT INTO modelo (cor, numero, categoria_modelo) VALUES (?, ?, ?) RETURNING codigo";
+        try (Connection con = Conexao.obterConexao();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setString(1, m.getCor());
+            ps.setInt(2, m.getNumero());
+            ps.setString(3, m.getCategoriaModelo());
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) m.setCodigo(rs.getInt("codigo"));
+        }
     }
 
-    public List<Modelo> listar() {
+    public void atualizar(Modelo m) throws SQLException {
+        String sql = "UPDATE modelo SET cor = ?, numero = ?, categoria_modelo = ? WHERE codigo = ?";
+        try (Connection con = Conexao.obterConexao();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setString(1, m.getCor());
+            ps.setInt(2, m.getNumero());
+            ps.setString(3, m.getCategoriaModelo());
+            ps.setInt(4, m.getCodigo());
+            ps.executeUpdate();
+        }
+    }
+
+    public void excluir(Integer codigo) throws SQLException {
+        String sql = "DELETE FROM modelo WHERE codigo = ?";
+        try (Connection con = Conexao.obterConexao();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setInt(1, codigo);
+            ps.executeUpdate();
+        }
+    }
+
+    public Modelo buscarPorId(Integer codigo) throws SQLException {
+        String sql = "SELECT * FROM modelo WHERE codigo = ?";
+        try (Connection con = Conexao.obterConexao();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setInt(1, codigo);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) return mapear(rs);
+            return null;
+        }
+    }
+
+    public List<Modelo> listarTodos() throws SQLException {
         List<Modelo> lista = new ArrayList<>();
-        String sql = "SELECT * FROM modelo";
-        try (Connection c = Conexao.getConexao(); PreparedStatement stmt = c.prepareStatement(sql); ResultSet rs = stmt.executeQuery()) {
-            while (rs.next()) { lista.add(new Modelo(rs.getInt("codigo"), rs.getString("cor"), rs.getInt("numero"), rs.getString("categoria_modelo"))); }
-        } catch (SQLException e) { System.err.println("Erro: " + e.getMessage()); }
+        String sql = "SELECT * FROM modelo ORDER BY codigo";
+        try (Connection con = Conexao.obterConexao();
+             PreparedStatement ps = con.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) lista.add(mapear(rs));
+        }
         return lista;
     }
 
-    public void atualizar(Modelo m) {
-        String sql = "UPDATE modelo SET cor=?, numero=?, categoria_modelo=? WHERE codigo=?";
-        try (Connection c = Conexao.getConexao(); PreparedStatement stmt = c.prepareStatement(sql)) {
-            stmt.setString(1, m.getCor()); stmt.setInt(2, m.getNumero()); stmt.setString(3, m.getCategoriaModelo()); stmt.setInt(4, m.getCodigo()); stmt.executeUpdate();
-        } catch (SQLException e) { System.err.println("Erro: " + e.getMessage()); }
-    }
-
-    public void deletar(int codigo) {
-        String sql = "DELETE FROM modelo WHERE codigo=?";
-        try (Connection c = Conexao.getConexao(); PreparedStatement stmt = c.prepareStatement(sql)) {
-            stmt.setInt(1, codigo); stmt.executeUpdate();
-        } catch (SQLException e) { System.err.println("Erro: " + e.getMessage()); }
+    private Modelo mapear(ResultSet rs) throws SQLException {
+        return new Modelo(rs.getInt("codigo"), rs.getString("cor"), rs.getInt("numero"),
+                           rs.getString("categoria_modelo"));
     }
     
 }
