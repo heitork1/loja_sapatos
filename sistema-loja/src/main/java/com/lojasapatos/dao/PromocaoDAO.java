@@ -9,36 +9,47 @@ import java.util.List;
 import com.lojasapatos.model.Promocao;
 
 public class PromocaoDAO {
-    public void salvar(Promocao p) {
-        String sql = "INSERT INTO promocao (categorias, nome, periodo_vigencia) VALUES (?, ?, ?)";
-        try (Connection conn = Conexao.getConexao(); PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setString(1, p.getCategorias());
-            stmt.setString(2, p.getNome());
-            stmt.setString(3, p.getPeriodoVigencia());
-            stmt.executeUpdate();
-        } catch (SQLException e) { System.err.println("Erro: " + e.getMessage()); }
+    public void inserir(Promocao p) throws SQLException {
+        String sql = "INSERT INTO promocao (nome, data_inicio, data_fim, categorias) VALUES (?, ?, ?, ?) " +
+                     "RETURNING id_promocao";
+        try (Connection con = Conexao.obterConexao();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setString(1, p.getNome());
+            ps.setDate(2, Date.valueOf(p.getDataInicio()));
+            ps.setDate(3, Date.valueOf(p.getDataFim()));
+            ps.setString(4, p.getCategorias());
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) p.setIdPromocao(rs.getInt("id_promocao"));
+        }
     }
 
-    public List<Promocao> listar() {
+    /** Requisito (e): promoções ativas e os produtos por elas contemplados. */
+    public List<Promocao> listarAtivas() throws SQLException {
         List<Promocao> lista = new ArrayList<>();
-        String sql = "SELECT * FROM promocao";
-        try (Connection c = Conexao.getConexao(); PreparedStatement stmt = c.prepareStatement(sql); ResultSet rs = stmt.executeQuery()) {
-            while (rs.next()) { lista.add(new Promocao(rs.getInt("id_promocao"), rs.getString("categorias"), rs.getString("nome"), rs.getString("periodo_vigencia"))); }
-        } catch (SQLException e) { System.err.println("Erro: " + e.getMessage()); }
+        String sql = "SELECT * FROM promocao WHERE CURRENT_DATE BETWEEN data_inicio AND data_fim";
+        try (Connection con = Conexao.obterConexao();
+             PreparedStatement ps = con.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) lista.add(mapear(rs));
+        }
         return lista;
     }
 
-    public void atualizar(Promocao p) {
-        String sql = "UPDATE promocao SET categorias=?, nome=?, periodo_vigencia=? WHERE id_promocao=?";
-        try (Connection c = Conexao.getConexao(); PreparedStatement stmt = c.prepareStatement(sql)) {
-            stmt.setString(1, p.getCategorias()); stmt.setString(2, p.getNome()); stmt.setString(3, p.getPeriodoVigencia()); stmt.setInt(4, p.getIdPromocao()); stmt.executeUpdate();
-        } catch (SQLException e) { System.err.println("Erro: " + e.getMessage()); }
+    public List<Promocao> listarTodas() throws SQLException {
+        List<Promocao> lista = new ArrayList<>();
+        String sql = "SELECT * FROM promocao ORDER BY data_inicio DESC";
+        try (Connection con = Conexao.obterConexao();
+             PreparedStatement ps = con.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) lista.add(mapear(rs));
+        }
+        return lista;
     }
 
-    public void deletar(int idPromocao) {
-        String sql = "DELETE FROM promocao WHERE id_promocao=?";
-        try (Connection c = Conexao.getConexao(); PreparedStatement stmt = c.prepareStatement(sql)) {
-            stmt.setInt(1, idPromocao); stmt.executeUpdate();
-        } catch (SQLException e) { System.err.println("Erro: " + e.getMessage()); }
+    private Promocao mapear(ResultSet rs) throws SQLException {
+        Promocao p = new Promocao(rs.getString("nome"), rs.getDate("data_inicio").toLocalDate(),
+                                   rs.getDate("data_fim").toLocalDate(), rs.getString("categorias"));
+        p.setIdPromocao(rs.getInt("id_promocao"));
+        return p;
     }
 }
