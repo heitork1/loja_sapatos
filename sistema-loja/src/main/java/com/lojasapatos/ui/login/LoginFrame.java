@@ -23,7 +23,7 @@ public class LoginFrame extends JFrame {
 
     public LoginFrame() {
         setTitle("Login - Sistema Loja de Sapatos");
-        setSize(850, 500);
+        setSize(850, 520); // Aumentei um pouquinho a altura para caber o formulário de cadastro
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setLayout(new GridLayout(1, 2));
@@ -36,47 +36,60 @@ public class LoginFrame extends JFrame {
         add(rightCardPanel);
     }
 
+    // ==========================================
+    // PAINEL ESQUERDO (Branding / Cor Dinâmica)
+    // ==========================================
     private void initLeftPanel() {
-        leftPanel = new JPanel();
+        // Trocado de BoxLayout para GridBagLayout para garantir o alinhamento central absoluto
+        leftPanel = new JPanel(new GridBagLayout());
         leftPanel.setBackground(Cores.ADMIN_PRIMARY);
-        leftPanel.setLayout(new BoxLayout(leftPanel, BoxLayout.Y_AXIS));
-        leftPanel.setBorder(new EmptyBorder(80, 40, 40, 40));
+        
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = GridBagConstraints.RELATIVE;
+        gbc.anchor = GridBagConstraints.CENTER;
 
+        // Ícone
         JLabel lblIcon = new JLabel("👟");
         lblIcon.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 100));
         lblIcon.setForeground(Color.WHITE);
-        lblIcon.setAlignmentX(Component.CENTER_ALIGNMENT);
+        leftPanel.add(lblIcon, gbc);
 
+        // Título
         lblLeftTitle = new JLabel("Loja de Sapatos");
         lblLeftTitle.setFont(new Font("Segoe UI", Font.BOLD, 28));
         lblLeftTitle.setForeground(Color.WHITE);
-        lblLeftTitle.setAlignmentX(Component.CENTER_ALIGNMENT);
         lblLeftTitle.setBorder(new EmptyBorder(20, 0, 10, 0));
+        leftPanel.add(lblLeftTitle, gbc);
 
-        lblLeftSubtitle = new JLabel("Sistema Administrativo");
+        // Subtítulo
+        lblLeftSubtitle = new JLabel("Sistema Administrativo", SwingConstants.CENTER);
         lblLeftSubtitle.setFont(new Font("Segoe UI", Font.PLAIN, 16));
         lblLeftSubtitle.setForeground(Color.WHITE);
-        lblLeftSubtitle.setAlignmentX(Component.CENTER_ALIGNMENT);
-
-        leftPanel.add(lblIcon);
-        leftPanel.add(lblLeftTitle);
-        leftPanel.add(lblLeftSubtitle);
+        lblLeftSubtitle.setHorizontalAlignment(SwingConstants.CENTER); // Garante que o texto fique no meio
+        leftPanel.add(lblLeftSubtitle, gbc);
     }
 
+    // ==========================================
+    // PAINEL DIREITO (CardLayout alternando forms)
+    // ==========================================
     private void initRightPanel() {
         cardLayout = new CardLayout();
         rightCardPanel = new JPanel(cardLayout);
         rightCardPanel.setBackground(Color.WHITE);
 
+        // Adiciona as 3 telas possíveis do lado direito
         rightCardPanel.add(createAdminForm(), "ADMIN");
-        rightCardPanel.add(createClienteForm(), "CLIENTE");
+        rightCardPanel.add(createClienteLoginForm(), "CLIENTE_LOGIN");
+        rightCardPanel.add(createClienteCadastroForm(), "CLIENTE_CADASTRO");
     }
 
+    // --- FORMULÁRIO: ADMIN ---
     private JPanel createAdminForm() {
         JPanel panel = new JPanel(new GridBagLayout());
         panel.setBackground(Color.WHITE);
         GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(5, 40, 5, 40); // Margens laterais
+        gbc.insets = new Insets(5, 40, 5, 40);
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.weightx = 1.0;
 
@@ -130,14 +143,15 @@ public class LoginFrame extends JFrame {
         comboPerfil.addActionListener(e -> {
             if (comboPerfil.getSelectedIndex() == 1) {
                 switchToCliente();
-                comboPerfil.setSelectedIndex(0); // Reseta o combo para quando voltar
+                comboPerfil.setSelectedIndex(0); 
             }
         });
 
         return panel;
     }
 
-    private JPanel createClienteForm() {
+    // --- FORMULÁRIO: CLIENTE (LOGIN) ---
+    private JPanel createClienteLoginForm() {
         JPanel panel = new JPanel(new GridBagLayout());
         panel.setBackground(Color.WHITE);
         GridBagConstraints gbc = new GridBagConstraints();
@@ -145,21 +159,8 @@ public class LoginFrame extends JFrame {
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.weightx = 1.0;
 
-        JPanel panelTabs = new JPanel(new GridLayout(1, 2));
-        panelTabs.setBackground(Color.WHITE);
-        
-        JLabel tabLogin = new JLabel("Login", SwingConstants.CENTER);
-        tabLogin.setFont(new Font("Segoe UI", Font.BOLD, 14));
-        tabLogin.setBorder(BorderFactory.createMatteBorder(0, 0, 2, 0, Cores.TEXTO_ESCURO));
-        
-        JLabel tabCadastrar = new JLabel("Cadastrar", SwingConstants.CENTER);
-        tabCadastrar.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-        tabCadastrar.setForeground(Color.GRAY);
-        tabCadastrar.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.LIGHT_GRAY));
-
-        panelTabs.add(tabLogin);
-        panelTabs.add(tabCadastrar);
-
+        // Abas interativas (Passamos true porque é a tela de Login)
+        JPanel panelTabs = createTabs(true);
         gbc.gridx = 0; gbc.gridy = 0;
         gbc.insets = new Insets(10, 40, 30, 40);
         panel.add(panelTabs, gbc);
@@ -184,24 +185,27 @@ public class LoginFrame extends JFrame {
         gbc.gridy = 4; gbc.insets = new Insets(0, 40, 25, 40);
         panel.add(txtPass, gbc);
 
-        // Botão Entrar
         Botao btnEntrar = new Botao("Entrar", Cores.CLIENTE_PRIMARY);
         gbc.gridy = 5; gbc.insets = new Insets(0, 40, 15, 40);
         panel.add(btnEntrar, gbc);
 
-        // Link Esqueci Senha
         JLabel linkEsqueceu = createLink("Esqueceu sua senha?", Color.GRAY);
         gbc.gridy = 6;
         panel.add(linkEsqueceu, gbc);
 
-        // Link Cadastre-se e Voltar
         JPanel panelRodape = new JPanel(new GridLayout(2, 1, 0, 5));
         panelRodape.setBackground(Color.WHITE);
         
-        JLabel lblNaoTem = new JLabel("Não tem conta? Cadastre-se", SwingConstants.CENTER);
+        JLabel lblNaoTem = createLink("Não tem conta? Cadastre-se", Cores.CLIENTE_ACCENT);
         lblNaoTem.setFont(Cores.PEQUENO);
+        lblNaoTem.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent e) { cardLayout.show(rightCardPanel, "CLIENTE_CADASTRO"); }
+        });
         
         JLabel linkVoltar = createLink("← Voltar para Admin", Cores.BTN_AZUL);
+        linkVoltar.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent e) { switchToAdmin(); }
+        });
         
         panelRodape.add(lblNaoTem);
         panelRodape.add(linkVoltar);
@@ -209,15 +213,129 @@ public class LoginFrame extends JFrame {
         gbc.gridy = 7; gbc.insets = new Insets(20, 40, 0, 40);
         panel.add(panelRodape, gbc);
 
-        // AÇÃO: Voltar para Admin
+        return panel;
+    }
+
+    // --- FORMULÁRIO: CLIENTE (CADASTRO) ---
+    private JPanel createClienteCadastroForm() {
+        JPanel panel = new JPanel(new GridBagLayout());
+        panel.setBackground(Color.WHITE);
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(2, 40, 2, 40); // Margens menores para caber tudo
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.weightx = 1.0;
+
+        // Abas interativas (Passamos false porque é a tela de Cadastro)
+        JPanel panelTabs = createTabs(false);
+        gbc.gridx = 0; gbc.gridy = 0;
+        gbc.insets = new Insets(10, 40, 15, 40);
+        panel.add(panelTabs, gbc);
+
+        // NOME
+        gbc.insets = new Insets(2, 40, 2, 40);
+        JLabel lblNome = new JLabel("Nome Completo");
+        lblNome.setFont(Cores.LABEL);
+        gbc.gridy = 1; panel.add(lblNome, gbc);
+
+        JTextField txtNome = createTextField();
+        addPlaceholder(txtNome, "Digite seu nome");
+        gbc.gridy = 2; gbc.insets = new Insets(0, 40, 8, 40);
+        panel.add(txtNome, gbc);
+
+        // CPF
+        gbc.insets = new Insets(2, 40, 2, 40);
+        JLabel lblCpf = new JLabel("CPF");
+        lblCpf.setFont(Cores.LABEL);
+        gbc.gridy = 3; panel.add(lblCpf, gbc);
+
+        JTextField txtCpf = createTextField();
+        addPlaceholder(txtCpf, "Digite seu CPF");
+        gbc.gridy = 4; gbc.insets = new Insets(0, 40, 8, 40);
+        panel.add(txtCpf, gbc);
+
+        // EMAIL
+        gbc.insets = new Insets(2, 40, 2, 40);
+        JLabel lblEmail = new JLabel("E-mail");
+        lblEmail.setFont(Cores.LABEL);
+        gbc.gridy = 5; panel.add(lblEmail, gbc);
+
+        JTextField txtEmail = createTextField();
+        addPlaceholder(txtEmail, "Digite seu e-mail");
+        gbc.gridy = 6; gbc.insets = new Insets(0, 40, 8, 40);
+        panel.add(txtEmail, gbc);
+
+        // SENHA
+        gbc.insets = new Insets(2, 40, 2, 40);
+        JLabel lblPass = new JLabel("Senha");
+        lblPass.setFont(Cores.LABEL);
+        gbc.gridy = 7; panel.add(lblPass, gbc);
+
+        JPasswordField txtPass = createPasswordField();
+        addPlaceholder(txtPass, "Crie uma senha");
+        gbc.gridy = 8; gbc.insets = new Insets(0, 40, 15, 40);
+        panel.add(txtPass, gbc);
+
+        // Botão Cadastrar
+        Botao btnCadastrar = new Botao("Cadastrar", Cores.CLIENTE_PRIMARY);
+        gbc.gridy = 9; gbc.insets = new Insets(0, 40, 10, 40);
+        panel.add(btnCadastrar, gbc);
+
+        // Voltar
+        JLabel linkVoltar = createLink("← Voltar para Admin", Cores.BTN_AZUL);
         linkVoltar.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                switchToAdmin();
-            }
+            public void mouseClicked(MouseEvent e) { switchToAdmin(); }
         });
+        gbc.gridy = 10;
+        panel.add(linkVoltar, gbc);
 
         return panel;
+    }
+
+    // ==========================================
+    // MÉTODO AUXILIAR: Criação dinâmica das Abas (Tabs)
+    // ==========================================
+    private JPanel createTabs(boolean isLoginActive) {
+        JPanel panelTabs = new JPanel(new GridLayout(1, 2));
+        panelTabs.setBackground(Color.WHITE);
+        
+        JLabel tabLogin = new JLabel("Login", SwingConstants.CENTER);
+        JLabel tabCadastrar = new JLabel("Cadastrar", SwingConstants.CENTER);
+
+        if (isLoginActive) {
+            // Estilo ativo para Login
+            tabLogin.setFont(new Font("Segoe UI", Font.BOLD, 14));
+            tabLogin.setBorder(BorderFactory.createMatteBorder(0, 0, 2, 0, Cores.TEXTO_ESCURO));
+            tabLogin.setForeground(Cores.TEXTO_ESCURO);
+            
+            // Estilo inativo/clicável para Cadastrar
+            tabCadastrar.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+            tabCadastrar.setForeground(Color.GRAY);
+            tabCadastrar.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.LIGHT_GRAY));
+            tabCadastrar.setCursor(new Cursor(Cursor.HAND_CURSOR));
+            tabCadastrar.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) { cardLayout.show(rightCardPanel, "CLIENTE_CADASTRO"); }
+            });
+        } else {
+            // Estilo inativo/clicável para Login
+            tabLogin.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+            tabLogin.setForeground(Color.GRAY);
+            tabLogin.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.LIGHT_GRAY));
+            tabLogin.setCursor(new Cursor(Cursor.HAND_CURSOR));
+            tabLogin.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) { cardLayout.show(rightCardPanel, "CLIENTE_LOGIN"); }
+            });
+            
+            // Estilo ativo para Cadastrar
+            tabCadastrar.setFont(new Font("Segoe UI", Font.BOLD, 14));
+            tabCadastrar.setBorder(BorderFactory.createMatteBorder(0, 0, 2, 0, Cores.TEXTO_ESCURO));
+            tabCadastrar.setForeground(Cores.TEXTO_ESCURO);
+        }
+
+        panelTabs.add(tabLogin);
+        panelTabs.add(tabCadastrar);
+        return panelTabs;
     }
 
     // ==========================================
@@ -226,7 +344,7 @@ public class LoginFrame extends JFrame {
     private void switchToCliente() {
         leftPanel.setBackground(Cores.CLIENTE_PRIMARY);
         lblLeftSubtitle.setText("<html><center>Bem-vindo!<br>Faça login ou cadastre-se<br>para continuar.</center></html>");
-        cardLayout.show(rightCardPanel, "CLIENTE");
+        cardLayout.show(rightCardPanel, "CLIENTE_LOGIN");
     }
 
     private void switchToAdmin() {
@@ -264,12 +382,10 @@ public class LoginFrame extends JFrame {
         return link;
     }
 
-    // Truque para colocar um texto cinza que some ao clicar (Placeholder)
     private void addPlaceholder(JTextField field, String placeholder) {
         field.setText(placeholder);
         field.setForeground(Color.GRAY);
 
-        // Se for campo de senha, desativa os "bolinhas" inicialmente
         if (field instanceof JPasswordField) {
             ((JPasswordField) field).setEchoChar((char) 0);
         }
@@ -281,7 +397,7 @@ public class LoginFrame extends JFrame {
                     field.setText("");
                     field.setForeground(Cores.TEXTO_ESCURO);
                     if (field instanceof JPasswordField) {
-                        ((JPasswordField) field).setEchoChar('•'); // Volta bolinhas
+                        ((JPasswordField) field).setEchoChar('•');
                     }
                 }
             }
@@ -292,7 +408,7 @@ public class LoginFrame extends JFrame {
                     field.setForeground(Color.GRAY);
                     field.setText(placeholder);
                     if (field instanceof JPasswordField) {
-                        ((JPasswordField) field).setEchoChar((char) 0); // Tira bolinhas
+                        ((JPasswordField) field).setEchoChar((char) 0);
                     }
                 }
             }
