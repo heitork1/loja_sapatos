@@ -5,7 +5,7 @@ public class Fornecedor {
     private String cnpj;
     private String contato;
 
-
+    public Fornecedor() {}
     public Fornecedor(String razaoSocial, String cnpj, String contato) {
         this.razaoSocial = razaoSocial;
         this.cnpj = cnpj;
@@ -35,6 +35,11 @@ public class Fornecedor {
 
     public void setContato(String contato) {
         this.contato = contato;
+    }
+    
+    @Override
+    public String toString() {
+        return "Fornecedor{razaoSocial='" + razaoSocial + "', cnpj='" + cnpj + "', contato='" + contato + "'}";
     }
 
 }
