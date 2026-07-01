@@ -1,49 +1,36 @@
 package com.lojasapatos.model;
 
+import java.time.LocalDate;
+
 public class Promocao {
     private Integer idPromocao;
-    private String categorias;
     private String nome;
-    private String periodoVigencia;
-
-    public Promocao(Integer idPromocao, String categorias, String nome, String periodoVigencia) {
-        this.idPromocao = idPromocao;
-        this.categorias = categorias;
-        this.nome = nome;
-        this.periodoVigencia = periodoVigencia;
-    }
-
-    public Integer getIdPromocao() {
-        return idPromocao;
-    }
-
-    public void setIdPromocao(Integer idPromocao) {
-        this.idPromocao = idPromocao;
-    }
-
-    public String getCategorias() {
-        return categorias;
-    }
-
-    public void setCategorias(String categorias) {
-        this.categorias = categorias;
-    }
-
-    public String getNome() {
-        return nome;
-    }
-
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
-
-    public String getPeriodoVigencia() {
-        return periodoVigencia;
-    }
-
-    public void setPeriodoVigencia(String periodoVigencia) {
-        this.periodoVigencia = periodoVigencia;
-    }
+    private LocalDate dataInicio;
+    private LocalDate dataFim;
+    private String categorias;
 
     public Promocao() {}
+    public Promocao(String nome, LocalDate dataInicio, LocalDate dataFim, String categorias) {
+        this.nome = nome;
+        this.dataInicio = dataInicio;
+        this.dataFim = dataFim;
+        this.categorias = categorias;
+    }
+
+    public Integer getIdPromocao() { return idPromocao; }
+    public void setIdPromocao(Integer idPromocao) { this.idPromocao = idPromocao; }
+    public String getNome() { return nome; }
+    public void setNome(String nome) { this.nome = nome; }
+    public LocalDate getDataInicio() { return dataInicio; }
+    public void setDataInicio(LocalDate dataInicio) { this.dataInicio = dataInicio; }
+    public LocalDate getDataFim() { return dataFim; }
+    public void setDataFim(LocalDate dataFim) { this.dataFim = dataFim; }
+    public String getCategorias() { return categorias; }
+    public void setCategorias(String categorias) { this.categorias = categorias; }
+
+    @Override
+    public String toString() {
+        return "Promocao{idPromocao=" + idPromocao + ", nome='" + nome + "', dataInicio=" + dataInicio +
+               ", dataFim=" + dataFim + ", categorias='" + categorias + "'}";
+    }
 }
