@@ -10,8 +10,15 @@ public class Funcionario {
     private LocalDate dataAdmissao;
     private Integer idFilial;
 
-    public Funcionario(Integer codigo, String cpf, String funcao, String nome, LocalDate dataAdmissao,
-            Integer idFilial) {
+    public Funcionario() {}
+    public Funcionario(String cpf, String funcao, String nome, LocalDate dataAdmissao, Integer idFilial) {
+        this.cpf = cpf;
+        this.funcao = funcao;
+        this.nome = nome;
+        this.dataAdmissao = dataAdmissao;
+        this.idFilial = idFilial;
+    }
+    public Funcionario(Integer codigo, String cpf, String funcao, String nome, LocalDate dataAdmissao, Integer idFilial) {
         this.codigo = codigo;
         this.cpf = cpf;
         this.funcao = funcao;
@@ -67,7 +74,11 @@ public class Funcionario {
     public void setIdFilial(Integer idFilial) {
         this.idFilial = idFilial;
     }
-
     
-    public Funcionario() {}
+    @Override
+    public String toString() {
+        return "Funcionario{codigo=" + codigo + ", cpf='" + cpf + "', funcao='" + funcao +
+               "', nome='" + nome + "', dataAdmissao=" + dataAdmissao + ", idFilial=" + idFilial + "}";
+    }
+
 }
