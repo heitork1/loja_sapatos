@@ -149,3 +149,4 @@ public class VendaDAO {
         void somar(java.math.BigDecimal v) { valor = valor.add(v); }
         java.math.BigDecimal getValor() { return valor; }
     }
+}
