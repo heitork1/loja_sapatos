@@ -8,7 +8,15 @@ public class Produto {
     private Double preco; // Double é ótimo para dinheiro na faculdade
     private Integer idModelo; // Chave Estrangeira
 
-    public Produto(Integer codigo, String marca, String categoria, String publicoAlvo, Double preco, Integer idModelo) {
+    public Produto() {}
+    public Produto(String marca, String categoria, String publicoAlvo, BigDecimal preco, Integer idModelo) {
+        this.marca = marca;
+        this.categoria = categoria;
+        this.publicoAlvo = publicoAlvo;
+        this.preco = preco;
+        this.idModelo = idModelo;
+    }
+    public Produto(Integer codigo, String marca, String categoria, String publicoAlvo, BigDecimal preco, Integer idModelo) {
         this.codigo = codigo;
         this.marca = marca;
         this.categoria = categoria;
@@ -64,6 +72,10 @@ public class Produto {
     public void setIdModelo(Integer idModelo) {
         this.idModelo = idModelo;
     }
-
-    public Produto() {}
+    
+    @Override
+    public String toString() {
+        return "Produto{codigo=" + codigo + ", marca='" + marca + "', categoria='" + categoria +
+               "', publicoAlvo='" + publicoAlvo + "', preco=" + preco + ", idModelo=" + idModelo + "}";
+    }
 }
