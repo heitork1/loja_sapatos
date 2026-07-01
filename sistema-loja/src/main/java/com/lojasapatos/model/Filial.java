@@ -4,11 +4,19 @@ public class Filial {
     private Integer idFilial;
     private Integer idEstoque; // FK
     private Integer idSede;    // FK
+    private String nomeFilial;
 
-    public Filial(Integer idFilial, Integer idEstoque, Integer idSede) {
-        this.idFilial = idFilial;
-        this.idEstoque = idEstoque;
+    public Filial() {}
+    public Filial(String nomeFilial, Integer idSede, Integer idEstoque) {
+        this.nomeFilial = nomeFilial;
         this.idSede = idSede;
+        this.idEstoque = idEstoque;
+    }
+    public Filial(Integer idFilial, String nomeFilial, Integer idSede, Integer idEstoque) {
+        this.idFilial = idFilial;
+        this.nomeFilial = nomeFilial;
+        this.idSede = idSede;
+        this.idEstoque = idEstoque;
     }
 
     public Integer getIdFilial() {
@@ -33,5 +41,13 @@ public class Filial {
 
     public void setIdSede(Integer idSede) {
         this.idSede = idSede;
+    }
+    public String getNomeFilial() { return nomeFilial; }
+    public void setNomeFilial(String nomeFilial) { this.nomeFilial = nomeFilial; }
+    
+    @Override
+    public String toString() {
+        return "Filial{idFilial=" + idFilial + ", nomeFilial='" + nomeFilial +
+               "', idSede=" + idSede + ", idEstoque=" + idEstoque + "}";
     }
 }
