@@ -23,7 +23,6 @@ public class PromocaoDAO {
         }
     }
 
-    /** Requisito (e): promoções ativas e os produtos por elas contemplados. */
     public List<Promocao> listarAtivas() throws SQLException {
         List<Promocao> lista = new ArrayList<>();
         String sql = "SELECT * FROM promocao WHERE CURRENT_DATE BETWEEN data_inicio AND data_fim";
