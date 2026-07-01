@@ -17,4 +17,14 @@ public class Conexao {
             return null;
         }
     }
+
+
+    public static Connection obterConexao() throws SQLException {
+        Connection con = getConexao();
+        if (con == null) {
+            throw new SQLException("Não foi possível conectar ao banco de dados. " +
+                    "Verifique se o PostgreSQL está rodando e se os dados em Conexao.java estão corretos.");
+        }
+        return con;
+    }
 }
