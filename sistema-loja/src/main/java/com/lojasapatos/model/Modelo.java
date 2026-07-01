@@ -5,7 +5,13 @@ public class Modelo {
     private String cor;
     private Integer numero; //do calçado
     private String categoriaModelo;
-
+    
+    public Modelo() {}
+    public Modelo(String cor, Integer numero, String categoriaModelo) {
+        this.cor = cor;
+        this.numero = numero;
+        this.categoriaModelo = categoriaModelo;
+    }
     public Modelo(Integer codigo, String cor, Integer numero, String categoriaModelo) {
         this.codigo = codigo;
         this.cor = cor;
@@ -44,6 +50,10 @@ public class Modelo {
     public void setCategoriaModelo(String categoriaModelo) {
         this.categoriaModelo = categoriaModelo;
     }
-
-    public Modelo() {}
+    
+    @Override
+    public String toString() {
+        return "Modelo{codigo=" + codigo + ", cor='" + cor + "', numero=" + numero +
+               ", categoriaModelo='" + categoriaModelo + "'}";
+    }
 }
