@@ -3,14 +3,13 @@ import java.time.LocalDate;
 
 public class Transferencia {
     private int idFilial;
-    private int codigoProduto;
+    private int codigo;
     private LocalDate dataTransferencia; // O atributo extra que obrigou a ter a classe!
 
     public Transferencia() {}
-
-    public Transferencia(int idFilial, int codigoProduto, LocalDate dataTransferencia) {
+    public Transferencia(int idFilial, int codigo, LocalDate dataTransferencia) {
         this.idFilial = idFilial;
-        this.codigoProduto = codigoProduto;
+        this.codigo = codigo;
         this.dataTransferencia = dataTransferencia;
     }
 
@@ -22,12 +21,12 @@ public class Transferencia {
         this.idFilial = idFilial;
     }
 
-    public int getCodigoProduto() {
-        return codigoProduto;
+    public int getCodigo() {
+        return codigo;
     }
 
-    public void setCodigoProduto(int codigoProduto) {
-        this.codigoProduto = codigoProduto;
+    public void setCodigo(int codigo) {
+        this.codigo = codigo;
     }
 
     public LocalDate getDataTransferencia() {
@@ -36,6 +35,12 @@ public class Transferencia {
 
     public void setDataTransferencia(LocalDate dataTransferencia) {
         this.dataTransferencia = dataTransferencia;
+    }
+    
+    @Override
+    public String toString() {
+        return "Transferencia{idFilial=" + idFilial + ", codigo=" + codigo +
+               ", dataTransferencia=" + dataTransferencia + "}";
     }
     
 }
