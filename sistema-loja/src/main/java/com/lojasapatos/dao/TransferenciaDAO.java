@@ -6,36 +6,31 @@ import java.util.List;
 import com.lojasapatos.model.Transferencia;
 
 public class TransferenciaDAO {
-    public void salvar(Transferencia t) {
-        String sql = "INSERT INTO transferencia (id_filial, codigo_produto, data_transferencia) VALUES (?, ?, ?)";
-        try (Connection conn = Conexao.getConexao(); PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setInt(1, t.getIdFilial());
-            stmt.setInt(2, t.getCodigoProduto());
-            stmt.setDate(3, Date.valueOf(t.getDataTransferencia()));
-            stmt.executeUpdate();
-        } catch (SQLException e) { System.err.println("Erro: " + e.getMessage()); }
+    public void inserir(Transferencia t) throws SQLException {
+        String sql = "INSERT INTO transferencia (id_filial, codigo, data_transferencia) VALUES (?, ?, ?)";
+        try (Connection con = Conexao.obterConexao();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setInt(1, t.getIdFilial());
+            ps.setInt(2, t.getCodigo());
+            ps.setDate(3, Date.valueOf(t.getDataTransferencia()));
+            ps.executeUpdate();
+        }
     }
 
-    public List<Transferencia> listar() {
+    public List<Transferencia> listarPorFilial(Integer idFilial) throws SQLException {
         List<Transferencia> lista = new ArrayList<>();
-        String sql = "SELECT * FROM transferencia";
-        try (Connection c = Conexao.getConexao(); PreparedStatement stmt = c.prepareStatement(sql); ResultSet rs = stmt.executeQuery()) {
-            while (rs.next()) { lista.add(new Transferencia(rs.getInt("id_filial"), rs.getInt("codigo_produto"), rs.getDate("data_transferencia").toLocalDate())); }
-        } catch (SQLException e) { System.err.println("Erro: " + e.getMessage()); }
+        String sql = "SELECT * FROM transferencia WHERE id_filial = ? ORDER BY data_transferencia DESC";
+        try (Connection con = Conexao.obterConexao();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setInt(1, idFilial);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) lista.add(mapear(rs));
+        }
         return lista;
     }
 
-    public void atualizar(Transferencia t) {
-        String sql = "UPDATE transferencia SET data_transferencia=? WHERE id_filial=? AND codigo_produto=?";
-        try (Connection c = Conexao.getConexao(); PreparedStatement stmt = c.prepareStatement(sql)) {
-            stmt.setDate(1, Date.valueOf(t.getDataTransferencia())); stmt.setInt(2, t.getIdFilial()); stmt.setInt(3, t.getCodigoProduto()); stmt.executeUpdate();
-        } catch (SQLException e) { System.err.println("Erro: " + e.getMessage()); }
-    }
-
-    public void deletar(int idFilial, int codigoProduto) {
-        String sql = "DELETE FROM transferencia WHERE id_filial=? AND codigo_produto=?";
-        try (Connection c = Conexao.getConexao(); PreparedStatement stmt = c.prepareStatement(sql)) {
-            stmt.setInt(1, idFilial); stmt.setInt(2, codigoProduto); stmt.executeUpdate();
-        } catch (SQLException e) { System.err.println("Erro: " + e.getMessage()); }
+    private Transferencia mapear(ResultSet rs) throws SQLException {
+        return new Transferencia(rs.getInt("id_filial"), rs.getInt("codigo"),
+                                  rs.getDate("data_transferencia").toLocalDate());
     }
 }
