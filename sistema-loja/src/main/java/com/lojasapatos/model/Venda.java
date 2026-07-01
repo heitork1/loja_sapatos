@@ -60,5 +60,11 @@ public class Venda {
                formaPagamento + "', numParcelas=" + numParcelas + ", idFilial=" + idFilial +
                ", idFuncionario=" + idFuncionario + "}";
     }
+    public Integer getNumParcelas() {
+        return numParcelas;
+    }
+    public void setNumParcelas(Integer numParcelas) {
+        this.numParcelas = numParcelas;
+    }
 
 }

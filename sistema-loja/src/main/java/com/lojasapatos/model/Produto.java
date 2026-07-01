@@ -1,11 +1,13 @@
 package com.lojasapatos.model;
 
+import java.math.BigDecimal;
+
 public class Produto {
     private Integer codigo;
     private String marca;
     private String categoria;
     private String publicoAlvo;
-    private Double preco; // Double é ótimo para dinheiro na faculdade
+    private BigDecimal preco; 
     private Integer idModelo; // Chave Estrangeira
 
     public Produto() {}
@@ -57,11 +59,11 @@ public class Produto {
         this.publicoAlvo = publicoAlvo;
     }
 
-    public Double getPreco() {
+    public BigDecimal getPreco() {
         return preco;
     }
 
-    public void setPreco(Double preco) {
+    public void setPreco(BigDecimal preco) {
         this.preco = preco;
     }
 

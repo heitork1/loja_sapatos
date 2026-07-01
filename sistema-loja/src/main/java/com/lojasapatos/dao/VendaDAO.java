@@ -6,8 +6,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.sql.*;
 
 import com.lojasapatos.model.Venda;
+import com.lojasapatos.model.ItemVenda;
 
 public class VendaDAO {
     public void inserir(Venda v) throws SQLException {

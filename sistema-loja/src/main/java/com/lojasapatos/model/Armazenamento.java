@@ -34,6 +34,10 @@ public class Armazenamento {
         return quantidade;
     }
 
+    public Integer getCodigo() {
+        return codigo;
+    }
+
     public void setQuantidade(Integer quantidade) {
         this.quantidade = quantidade;
     }
