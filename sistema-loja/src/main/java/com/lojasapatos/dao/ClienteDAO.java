@@ -1,46 +1,102 @@
 package com.lojasapatos.dao;
+
+import com.lojasapatos.model.Cliente;
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.lojasapatos.model.Cliente;
-
 public class ClienteDAO {
-    public void salvar(Cliente c) {
-        String sql = "INSERT INTO cliente (cpf, telefone, email, pontos, nome, data_nascimento, numero, rua) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-        try (Connection conn = Conexao.getConexao(); PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setString(1, c.getCpf());
-            stmt.setString(2, c.getTelefone());
-            stmt.setString(3, c.getEmail());
-            stmt.setInt(4, c.getPontos());
-            stmt.setString(5, c.getNome());
-            stmt.setDate(6, Date.valueOf(c.getDataNascimento())); // Conversão da data aqui!
-            stmt.setString(7, c.getNumero());
-            stmt.setString(8, c.getRua());
-            stmt.executeUpdate();
-        } catch (SQLException e) { System.err.println("Erro: " + e.getMessage()); }
+
+    public void inserir(Cliente c) throws SQLException {
+        String sql = "INSERT INTO cliente (cpf, nome, data_nascimento, telefone, email, rua, numero, cep, pontos) " +
+                     "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        try (Connection con = Conexao.obterConexao();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setString(1, c.getCpf());
+            ps.setString(2, c.getNome());
+            ps.setDate(3, c.getDataNascimento() != null ? Date.valueOf(c.getDataNascimento()) : null);
+            ps.setString(4, c.getTelefone());
+            ps.setString(5, c.getEmail());
+            ps.setString(6, c.getRua());
+            ps.setString(7, c.getNumero());
+            ps.setString(8, c.getCep());
+            ps.setInt(9, c.getPontos() != null ? c.getPontos() : 0);
+            ps.executeUpdate();
+        }
     }
 
-    public List<Cliente> listar() {
+    public void atualizar(Cliente c) throws SQLException {
+        String sql = "UPDATE cliente SET nome = ?, data_nascimento = ?, telefone = ?, email = ?, " +
+                     "rua = ?, numero = ?, cep = ?, pontos = ? WHERE cpf = ?";
+        try (Connection con = Conexao.obterConexao();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setString(1, c.getNome());
+            ps.setDate(2, c.getDataNascimento() != null ? Date.valueOf(c.getDataNascimento()) : null);
+            ps.setString(3, c.getTelefone());
+            ps.setString(4, c.getEmail());
+            ps.setString(5, c.getRua());
+            ps.setString(6, c.getNumero());
+            ps.setString(7, c.getCep());
+            ps.setInt(8, c.getPontos());
+            ps.setString(9, c.getCpf());
+            ps.executeUpdate();
+        }
+    }
+
+    public void excluir(String cpf) throws SQLException {
+        String sql = "DELETE FROM cliente WHERE cpf = ?";
+        try (Connection con = Conexao.obterConexao();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setString(1, cpf);
+            ps.executeUpdate();
+        }
+    }
+
+    public Cliente buscarPorCpf(String cpf) throws SQLException {
+        String sql = "SELECT * FROM cliente WHERE cpf = ?";
+        try (Connection con = Conexao.obterConexao();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setString(1, cpf);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) return mapear(rs);
+            return null;
+        }
+    }
+
+    public List<Cliente> listarTodos() throws SQLException {
         List<Cliente> lista = new ArrayList<>();
-        String sql = "SELECT * FROM cliente";
-        try (Connection c = Conexao.getConexao(); PreparedStatement stmt = c.prepareStatement(sql); ResultSet rs = stmt.executeQuery()) {
-            while (rs.next()) { lista.add(new Cliente(rs.getString("cpf"), rs.getString("telefone"), rs.getString("email"), rs.getInt("pontos"), rs.getString("nome"), rs.getDate("data_nascimento").toLocalDate(), rs.getString("numero"), rs.getString("rua"))); }
-        } catch (SQLException e) { System.err.println("Erro: " + e.getMessage()); }
+        String sql = "SELECT * FROM cliente ORDER BY nome";
+        try (Connection con = Conexao.obterConexao();
+             PreparedStatement ps = con.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) lista.add(mapear(rs));
+        }
         return lista;
     }
 
-    public void atualizar(Cliente cli) {
-        String sql = "UPDATE cliente SET telefone=?, email=?, pontos=?, nome=?, data_nascimento=?, numero=?, rua=? WHERE cpf=?";
-        try (Connection c = Conexao.getConexao(); PreparedStatement stmt = c.prepareStatement(sql)) {
-            stmt.setString(1, cli.getTelefone()); stmt.setString(2, cli.getEmail()); stmt.setInt(3, cli.getPontos()); stmt.setString(4, cli.getNome()); stmt.setDate(5, Date.valueOf(cli.getDataNascimento())); stmt.setString(6, cli.getNumero()); stmt.setString(7, cli.getRua()); stmt.setString(8, cli.getCpf()); stmt.executeUpdate();
-        } catch (SQLException e) { System.err.println("Erro: " + e.getMessage()); }
+    public void adicionarPontos(String cpf, int pontosGanhos) throws SQLException {
+        String sql = "UPDATE cliente SET pontos = pontos + ? WHERE cpf = ?";
+        try (Connection con = Conexao.obterConexao();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setInt(1, pontosGanhos);
+            ps.setString(2, cpf);
+            ps.executeUpdate();
+        }
     }
 
-    public void deletar(String cpf) {
-        String sql = "DELETE FROM cliente WHERE cpf=?";
-        try (Connection c = Conexao.getConexao(); PreparedStatement stmt = c.prepareStatement(sql)) {
-            stmt.setString(1, cpf); stmt.executeUpdate();
-        } catch (SQLException e) { System.err.println("Erro: " + e.getMessage()); }
+    private Cliente mapear(ResultSet rs) throws SQLException {
+        Date nascimento = rs.getDate("data_nascimento");
+        return new Cliente(
+            rs.getString("cpf"),
+            rs.getString("nome"),
+            nascimento != null ? nascimento.toLocalDate() : null,
+            rs.getString("telefone"),
+            rs.getString("email"),
+            rs.getString("rua"),
+            rs.getString("numero"),
+            rs.getString("cep"),
+            rs.getInt("pontos")
+        );
     }
 }
