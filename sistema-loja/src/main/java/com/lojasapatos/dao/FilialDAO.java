@@ -6,36 +6,68 @@ import java.util.List;
 import com.lojasapatos.model.Filial;
 
 public class FilialDAO {
-    public void salvar(Filial f) {
-        String sql = "INSERT INTO filial (id_estoque, id_sede) VALUES (?, ?)";
-        try (Connection conn = Conexao.getConexao(); PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setInt(1, f.getIdEstoque());
-            stmt.setInt(2, f.getIdSede());
-            stmt.executeUpdate();
-        } catch (SQLException e) { System.err.println("Erro: " + e.getMessage()); }
+    public void inserir(Filial filial) throws SQLException {
+        String sql = "INSERT INTO filial (nome_filial, id_sede, id_estoque) VALUES (?, ?, ?) RETURNING id_filial";
+        try (Connection con = Conexao.obterConexao();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setString(1, filial.getNomeFilial());
+            ps.setInt(2, filial.getIdSede());
+            ps.setInt(3, filial.getIdEstoque());
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) filial.setIdFilial(rs.getInt("id_filial"));
+        }
     }
 
-    public List<Filial> listar() {
+    public void atualizar(Filial filial) throws SQLException {
+        String sql = "UPDATE filial SET nome_filial = ?, id_sede = ?, id_estoque = ? WHERE id_filial = ?";
+        try (Connection con = Conexao.obterConexao();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setString(1, filial.getNomeFilial());
+            ps.setInt(2, filial.getIdSede());
+            ps.setInt(3, filial.getIdEstoque());
+            ps.setInt(4, filial.getIdFilial());
+            ps.executeUpdate();
+        }
+    }
+
+    public void excluir(Integer idFilial) throws SQLException {
+        String sql = "DELETE FROM filial WHERE id_filial = ?";
+        try (Connection con = Conexao.obterConexao();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setInt(1, idFilial);
+            ps.executeUpdate();
+        }
+    }
+
+    public Filial buscarPorId(Integer idFilial) throws SQLException {
+        String sql = "SELECT * FROM filial WHERE id_filial = ?";
+        try (Connection con = Conexao.obterConexao();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setInt(1, idFilial);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) return mapear(rs);
+            return null;
+        }
+    }
+
+    public List<Filial> listarTodos() throws SQLException {
         List<Filial> lista = new ArrayList<>();
-        String sql = "SELECT * FROM filial";
-        try (Connection c = Conexao.getConexao(); PreparedStatement stmt = c.prepareStatement(sql); ResultSet rs = stmt.executeQuery()) {
-            while (rs.next()) { lista.add(new Filial(rs.getInt("id_filial"), rs.getInt("id_estoque"), rs.getInt("id_sede"))); }
-        } catch (SQLException e) { System.err.println("Erro: " + e.getMessage()); }
+        String sql = "SELECT * FROM filial ORDER BY id_filial";
+        try (Connection con = Conexao.obterConexao();
+             PreparedStatement ps = con.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) lista.add(mapear(rs));
+        }
         return lista;
     }
 
-    public void atualizar(Filial f) {
-        String sql = "UPDATE filial SET id_estoque=?, id_sede=? WHERE id_filial=?";
-        try (Connection c = Conexao.getConexao(); PreparedStatement stmt = c.prepareStatement(sql)) {
-            stmt.setInt(1, f.getIdEstoque()); stmt.setInt(2, f.getIdSede()); stmt.setInt(3, f.getIdFilial()); stmt.executeUpdate();
-        } catch (SQLException e) { System.err.println("Erro: " + e.getMessage()); }
-    }
-
-    public void deletar(int idFilial) {
-        String sql = "DELETE FROM filial WHERE id_filial=?";
-        try (Connection c = Conexao.getConexao(); PreparedStatement stmt = c.prepareStatement(sql)) {
-            stmt.setInt(1, idFilial); stmt.executeUpdate();
-        } catch (SQLException e) { System.err.println("Erro: " + e.getMessage()); }
+    private Filial mapear(ResultSet rs) throws SQLException {
+        return new Filial(
+            rs.getInt("id_filial"),
+            rs.getString("nome_filial"),
+            rs.getInt("id_sede"),
+            rs.getInt("id_estoque")
+        );
     }
     
 }
