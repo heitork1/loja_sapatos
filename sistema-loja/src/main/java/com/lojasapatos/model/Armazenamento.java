@@ -4,6 +4,7 @@ public class Armazenamento {
     private Integer idEstoque;
     private Integer codigoProduto;
     private Integer quantidade; // Quantos sapatos tem no estoque
+    private Integer codigo;
 
     public Armazenamento(Integer idEstoque, Integer codigoProduto, Integer quantidade) {
         this.idEstoque = idEstoque;

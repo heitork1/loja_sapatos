@@ -8,7 +8,7 @@ public class CompraDAO {
 
     public void inserir(Compra c) throws SQLException {
         String sql = "INSERT INTO compra (id_venda, cpf) VALUES (?, ?)";
-        try (Connection con = Conexao.obterConexao();
+        try (Connection con = Conexao.getConexao();
              PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setInt(1, c.getIdVenda());
             ps.setString(2, c.getCpf());
@@ -18,7 +18,7 @@ public class CompraDAO {
 
     public Compra buscarPorVenda(Integer idVenda) throws SQLException {
         String sql = "SELECT * FROM compra WHERE id_venda = ?";
-        try (Connection con = Conexao.obterConexao();
+        try (Connection con = Conexao.getConexao();
              PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setInt(1, idVenda);
             ResultSet rs = ps.executeQuery();

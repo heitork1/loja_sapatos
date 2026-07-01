@@ -11,7 +11,7 @@ public class ItemVendaDAO {
 
     public void inserir(ItemVenda item) throws SQLException {
         String sql = "INSERT INTO composicao (id_venda, codigo, quantidade, preco_unitario) VALUES (?, ?, ?, ?)";
-        try (Connection con = Conexao.obterConexao();
+        try (Connection con = Conexao.getConexao();
              PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setInt(1, item.getIdVenda());
             ps.setInt(2, item.getCodigo());
@@ -23,7 +23,7 @@ public class ItemVendaDAO {
 
     public void excluir(Integer idVenda, Integer codigo) throws SQLException {
         String sql = "DELETE FROM composicao WHERE id_venda = ? AND codigo = ?";
-        try (Connection con = Conexao.obterConexao();
+        try (Connection con = Conexao.getConexao();
              PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setInt(1, idVenda);
             ps.setInt(2, codigo);
@@ -34,7 +34,7 @@ public class ItemVendaDAO {
     public List<ItemVenda> listarPorVenda(Integer idVenda) throws SQLException {
         List<ItemVenda> lista = new ArrayList<>();
         String sql = "SELECT * FROM composicao WHERE id_venda = ?";
-        try (Connection con = Conexao.obterConexao();
+        try (Connection con = Conexao.getConexao();
              PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setInt(1, idVenda);
             ResultSet rs = ps.executeQuery();
