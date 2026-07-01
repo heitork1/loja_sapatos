@@ -6,38 +6,87 @@ import java.util.List;
 import com.lojasapatos.model.Funcionario;
 
 public class FuncionarioDAO {
-    public void salvar(Funcionario f) {
-        String sql = "INSERT INTO funcionarios (cpf, funcao, nome, data_admissao, id_filial) VALUES (?, ?, ?, ?, ?)";
-        try (Connection conn = Conexao.getConexao(); PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setString(1, f.getCpf());
-            stmt.setString(2, f.getFuncao());
-            stmt.setString(3, f.getNome());
-            stmt.setDate(4, Date.valueOf(f.getDataAdmissao()));
-            stmt.setInt(5, f.getIdFilial());
-            stmt.executeUpdate();
-        } catch (SQLException e) { System.err.println("Erro: " + e.getMessage()); }
+    public void inserir(Funcionario f) throws SQLException {
+        String sql = "INSERT INTO funcionario (cpf, funcao, nome, data_admissao, id_filial) " +
+                     "VALUES (?, ?, ?, ?, ?) RETURNING codigo";
+        try (Connection con = Conexao.obterConexao();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setString(1, f.getCpf());
+            ps.setString(2, f.getFuncao());
+            ps.setString(3, f.getNome());
+            ps.setDate(4, Date.valueOf(f.getDataAdmissao()));
+            ps.setInt(5, f.getIdFilial());
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) f.setCodigo(rs.getInt("codigo"));
+        }
     }
 
-    public List<Funcionario> listar() {
+    public void atualizar(Funcionario f) throws SQLException {
+        String sql = "UPDATE funcionario SET cpf = ?, funcao = ?, nome = ?, data_admissao = ?, id_filial = ? " +
+                     "WHERE codigo = ?";
+        try (Connection con = Conexao.obterConexao();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setString(1, f.getCpf());
+            ps.setString(2, f.getFuncao());
+            ps.setString(3, f.getNome());
+            ps.setDate(4, Date.valueOf(f.getDataAdmissao()));
+            ps.setInt(5, f.getIdFilial());
+            ps.setInt(6, f.getCodigo());
+            ps.executeUpdate();
+        }
+    }
+
+    public void excluir(Integer codigo) throws SQLException {
+        String sql = "DELETE FROM funcionario WHERE codigo = ?";
+        try (Connection con = Conexao.obterConexao();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setInt(1, codigo);
+            ps.executeUpdate();
+        }
+    }
+
+    public Funcionario buscarPorId(Integer codigo) throws SQLException {
+        String sql = "SELECT * FROM funcionario WHERE codigo = ?";
+        try (Connection con = Conexao.obterConexao();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setInt(1, codigo);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) return mapear(rs);
+            return null;
+        }
+    }
+
+    public List<Funcionario> listarPorFilial(Integer idFilial) throws SQLException {
         List<Funcionario> lista = new ArrayList<>();
-        String sql = "SELECT * FROM funcionarios";
-        try (Connection c = Conexao.getConexao(); PreparedStatement stmt = c.prepareStatement(sql); ResultSet rs = stmt.executeQuery()) {
-            while (rs.next()) { lista.add(new Funcionario(rs.getInt("codigo"), rs.getString("cpf"), rs.getString("funcao"), rs.getString("nome"), rs.getDate("data_admissao").toLocalDate(), rs.getInt("id_filial"))); }
-        } catch (SQLException e) { System.err.println("Erro: " + e.getMessage()); }
+        String sql = "SELECT * FROM funcionario WHERE id_filial = ? ORDER BY nome";
+        try (Connection con = Conexao.obterConexao();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setInt(1, idFilial);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) lista.add(mapear(rs));
+        }
         return lista;
     }
 
-    public void atualizar(Funcionario f) {
-        String sql = "UPDATE funcionarios SET cpf=?, funcao=?, nome=?, data_admissao=?, id_filial=? WHERE codigo=?";
-        try (Connection c = Conexao.getConexao(); PreparedStatement stmt = c.prepareStatement(sql)) {
-            stmt.setString(1, f.getCpf()); stmt.setString(2, f.getFuncao()); stmt.setString(3, f.getNome()); stmt.setDate(4, Date.valueOf(f.getDataAdmissao())); stmt.setInt(5, f.getIdFilial()); stmt.setInt(6, f.getCodigo()); stmt.executeUpdate();
-        } catch (SQLException e) { System.err.println("Erro: " + e.getMessage()); }
+    public List<Funcionario> listarTodos() throws SQLException {
+        List<Funcionario> lista = new ArrayList<>();
+        String sql = "SELECT * FROM funcionario ORDER BY codigo";
+        try (Connection con = Conexao.obterConexao();
+             PreparedStatement ps = con.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) lista.add(mapear(rs));
+        }
+        return lista;
     }
 
-    public void deletar(int codigo) {
-        String sql = "DELETE FROM funcionarios WHERE codigo=?";
-        try (Connection c = Conexao.getConexao(); PreparedStatement stmt = c.prepareStatement(sql)) {
-            stmt.setInt(1, codigo); stmt.executeUpdate();
-        } catch (SQLException e) { System.err.println("Erro: " + e.getMessage()); }
+    private Funcionario mapear(ResultSet rs) throws SQLException {
+        return new Funcionario(
+            rs.getInt("codigo"),
+            rs.getString("cpf"),
+            rs.getString("funcao"),
+            rs.getString("nome"),
+            rs.getDate("data_admissao").toLocalDate(),
+            rs.getInt("id_filial")
+        );
     }
 }
