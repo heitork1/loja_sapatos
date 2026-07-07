@@ -60,7 +60,7 @@ public class ClienteFrame extends JFrame {
         h.setPreferredSize(new Dimension(0,60));
         h.setBorder(BorderFactory.createEmptyBorder(0,24,0,24));
 
-        JLabel logo=new JLabel("👟  Loja de Sapatos");
+        JLabel logo=new JLabel("Loja de Sapatos");
         logo.setFont(new Font("Segoe UI",Font.BOLD,16));
         logo.setForeground(Cores.BRANCO);
         h.add(logo,BorderLayout.WEST);
@@ -88,7 +88,7 @@ public class ClienteFrame extends JFrame {
         direita.add(busca);
 
         // Carrinho com contador
-        lblContadorCarrinho=new JLabel("🛒  0");
+        lblContadorCarrinho=new JLabel("Carrinho (0)");
         lblContadorCarrinho.setFont(new Font("Segoe UI",Font.BOLD,14));
         lblContadorCarrinho.setForeground(Cores.BRANCO);
         lblContadorCarrinho.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
@@ -97,7 +97,7 @@ public class ClienteFrame extends JFrame {
         direita.add(lblContadorCarrinho);
 
         // Conta
-        JButton btnConta=navBtn("👤  Minha Conta");
+        JButton btnConta=navBtn("Minha Conta");
         btnConta.addActionListener(e->cardLayout.show(painelConteudo,"MinhaConta"));
         direita.add(btnConta);
 
@@ -141,6 +141,6 @@ public class ClienteFrame extends JFrame {
 
     private void atualizarContador(){
         int total=carrinho.stream().mapToInt(i->i[1]).sum();
-        lblContadorCarrinho.setText("🛒  "+total);
+        lblContadorCarrinho.setText("Carrinho (" + total + ")");
     }
 }
