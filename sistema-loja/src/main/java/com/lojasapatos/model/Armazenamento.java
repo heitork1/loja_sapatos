@@ -13,35 +13,21 @@ public class Armazenamento {
 
     public Armazenamento() {}
 
-    public Integer getIdEstoque() {
-        return idEstoque;
-    }
+    public Integer getIdEstoque()  { return idEstoque; }
+    public void setIdEstoque(Integer v) { this.idEstoque = v; }
 
-    public void setIdEstoque(Integer idEstoque) {
-        this.idEstoque = idEstoque;
-    }
-
-    public Integer getCodigoProduto() {
-        return codigoProduto;
-    }
-
-    public void setCodigoProduto(Integer codigoProduto) {
-        this.codigoProduto = codigoProduto;
-    }
-
-    public Integer getQuantidade() {
-        return quantidade;
-    }
-    
     public Integer getCodigo()     { return codigo; }
-    public void   setCodigo(Integer codigo) { this.codigo = codigo; }
+    public void setCodigo(Integer v) { this.codigo = v; }
 
-    public void setQuantidade(Integer quantidade) {
-        this.quantidade = quantidade;
-    }
-    
+    public Integer getCodigoProduto() { return codigo; }
+    public void setCodigoProduto(Integer v) { this.codigo = v; }
+
+    public Integer getQuantidade() { return quantidade; }
+    public void setQuantidade(Integer v) { this.quantidade = v; }
+
     @Override
     public String toString() {
-        return "Armazenamento{idEstoque=" + idEstoque + ", codigo=" + codigo + ", quantidade=" + quantidade + "}";
+        return "Armazenamento{idEstoque=" + idEstoque + ", codigo=" + codigo
+                + ", quantidade=" + quantidade + "}";
     }
 }
