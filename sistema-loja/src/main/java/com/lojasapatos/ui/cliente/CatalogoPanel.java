@@ -26,7 +26,7 @@ public class CatalogoPanel extends JPanel {
         carregarProdutos();
     }
 
-    /* ===== SIDEBAR DE CATEGORIAS ===== */
+    //side bar das categorias
     private JPanel criarSidebar() {
         JPanel p=new JPanel();
         p.setPreferredSize(new Dimension(170,0));
@@ -107,12 +107,33 @@ public class CatalogoPanel extends JPanel {
         card.add(topo,BorderLayout.NORTH);
 
         // Imagem (placeholder com ícone)
-        JPanel imgPanel=new JPanel(new GridBagLayout());
+        JPanel imgPanel = new JPanel(new BorderLayout()) {
+            @Override protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                Graphics2D g2 = (Graphics2D)g.create();
+                g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+                int cx = getWidth()/2, cy = getHeight()/2;
+                // solado
+                g2.setColor(new Color(60,60,60));
+                g2.fillRoundRect(cx-38, cy+14, 76, 12, 8, 8);
+                // corpo do sapato
+                int[] xp = {cx-38, cx-38, cx-10, cx+30, cx+38, cx+38};
+                int[] yp = {cy+14, cy-6,  cy-22, cy-22, cy-4,  cy+14};
+                g2.setColor(oferta ? new Color(180,0,50) : new Color(52,100,180));
+                g2.fillPolygon(xp, yp, 6);
+                // bico arredondado
+                g2.setColor(oferta ? new Color(140,0,40) : new Color(30,70,150));
+                g2.fillOval(cx+20, cy-12, 18, 14);
+                // detalhe cadarco
+                g2.setColor(Color.WHITE);
+                g2.setStroke(new BasicStroke(1.5f));
+                for (int i=0;i<3;i++)
+                    g2.drawLine(cx-20+i*10, cy-8, cx-15+i*10, cy-18);
+                g2.dispose();
+            }
+        };
         imgPanel.setBackground(new Color(245,245,250));
         imgPanel.setPreferredSize(new Dimension(180,110));
-        JLabel icone=new JLabel("👟",SwingConstants.CENTER);
-        icone.setFont(new Font("Segoe UI",Font.PLAIN,52));
-        imgPanel.add(icone);
         card.add(imgPanel,BorderLayout.CENTER);
 
         // Info
