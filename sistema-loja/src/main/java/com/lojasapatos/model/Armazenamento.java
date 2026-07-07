@@ -2,13 +2,12 @@ package com.lojasapatos.model;
 
 public class Armazenamento {
     private Integer idEstoque;
-    private Integer codigoProduto;
     private Integer quantidade; // Quantos sapatos tem no estoque
     private Integer codigo;
 
-    public Armazenamento(Integer idEstoque, Integer codigoProduto, Integer quantidade) {
+    public Armazenamento(Integer idEstoque, Integer codigo, Integer quantidade) {
         this.idEstoque = idEstoque;
-        this.codigoProduto = codigoProduto;
+        this.codigoProduto = codigo;
         this.quantidade = quantidade;
     }
 
@@ -33,10 +32,9 @@ public class Armazenamento {
     public Integer getQuantidade() {
         return quantidade;
     }
-
-    public Integer getCodigo() {
-        return codigo;
-    }
+    
+    public Integer getCodigo()     { return codigo; }
+    public void   setCodigo(Integer codigo) { this.codigo = codigo; }
 
     public void setQuantidade(Integer quantidade) {
         this.quantidade = quantidade;
