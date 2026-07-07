@@ -31,7 +31,6 @@ public class FuncionariosPanel extends JPanel {
         carregarDados();
     }
 
-    //topo
     private JPanel criarTopo() {
         JPanel p = new JPanel(new BorderLayout());
         p.setBackground(Cores.BRANCO);
@@ -55,8 +54,8 @@ public class FuncionariosPanel extends JPanel {
         });
 
         Botao btnNovo    = new Botao("+ Novo",   Cores.BTN_VERDE);
-        Botao btnEditar  = new Botao("✎ Editar", Cores.BTN_AZUL);
-        Botao btnExcluir = new Botao("✖ Excluir",Cores.BTN_VERMELHO);
+        Botao btnEditar  = new Botao("Editar", Cores.BTN_AZUL);
+        Botao btnExcluir = new Botao("Excluir",Cores.BTN_VERMELHO);
 
         btnNovo.addActionListener(e    -> abrirDialog(null));
         btnEditar.addActionListener(e  -> editarSelecionado());
@@ -117,7 +116,6 @@ public class FuncionariosPanel extends JPanel {
         return p;
     }
 
-    //dados
     private void carregarDados() { filtrar(); }
 
     private void filtrar() {
@@ -232,8 +230,8 @@ public class FuncionariosPanel extends JPanel {
 
         JPanel botoes = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         botoes.setBackground(Cores.BRANCO);
-        Botao btnSalvar   = new Botao("💾 Salvar",   Cores.BTN_VERDE);
-        Botao btnCancelar = new Botao("✖ Cancelar", Cores.BTN_CINZA);
+        Botao btnSalvar   = new Botao("Salvar",   Cores.BTN_VERDE);
+        Botao btnCancelar = new Botao("Cancelar", Cores.BTN_CINZA);
         btnCancelar.addActionListener(e -> dlg.dispose());
         btnSalvar.addActionListener(e -> {
             try {
