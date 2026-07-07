@@ -3,6 +3,7 @@ package com.lojasapatos.ui.cliente;
 import com.lojasapatos.dao.Conexao;
 import com.lojasapatos.model.Cliente;
 import com.lojasapatos.ui.*;
+import com.lojasapatos.ui.admin.DashboardPanel;
 
 import javax.swing.*;
 import javax.swing.border.*;
