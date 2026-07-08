@@ -55,7 +55,7 @@ public class AdminFrame extends JFrame {
         logo.setOpaque(false);
         logo.setBorder(BorderFactory.createEmptyBorder(20,15,20,15));
         JLabel lblLogo = new JLabel("👟  Loja de Sapatos");
-        lblLogo.setFont(new Font("Segoe UI", Font.BOLD, 13));
+        lblLogo.setFont(new Font("Segoe UI Emoji", Font.BOLD, 13));
         lblLogo.setForeground(Cores.BRANCO);
         logo.add(lblLogo, BorderLayout.CENTER);
         sidebar.add(logo);
@@ -65,7 +65,7 @@ public class AdminFrame extends JFrame {
 
         // Itens de menu
         String[] itens   = {"Dashboard","Estoque","Vendas","Pessoal","Fornecedores","Sede","Filiais"};
-        String[] icones  = {"⊞","⬜","💰","👤","🏭","🏛","🏪"};
+        String[] icones  = {"📊", "📦","💰","👤","🏭","🏛","🏪"};
         String[] cards   = {"Dashboard","Estoque","Vendas","Pessoal","Fornecedores","Sede","Filiais"};
         
         btnAtivo = null;
@@ -113,7 +113,7 @@ public class AdminFrame extends JFrame {
                 super.paintComponent(g);
             }
         };
-        btn.setFont(Cores.TEXTO);
+        btn.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 14));
         btn.setForeground(new Color(190,210,240));
         btn.setContentAreaFilled(false);
         btn.setBorderPainted(false);
