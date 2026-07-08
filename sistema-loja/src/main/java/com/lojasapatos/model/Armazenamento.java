@@ -7,7 +7,7 @@ public class Armazenamento {
 
     public Armazenamento(Integer idEstoque, Integer codigo, Integer quantidade) {
         this.idEstoque = idEstoque;
-        this.codigoProduto = codigo;
+        this.codigo = codigo;
         this.quantidade = quantidade;
     }
 
