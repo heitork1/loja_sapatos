@@ -188,9 +188,6 @@ public class EstoquePanel extends JPanel {
             public boolean isCellEditable(int r,int c){ return false; }
         };
         JTable t = DashboardPanel.estilizarTabela(new JTable(m));
-        // Dados mock (substitua por consulta real se quiser)
-        m.addRow(new Object[]{"Loja Centro", "12", "5"});
-        m.addRow(new Object[]{"Loja Shopping", "8", "5"});
         p.add(new JScrollPane(t), BorderLayout.CENTER);
         return p;
     }

@@ -30,6 +30,8 @@ public class AdminFrame extends JFrame {
         painelConteudo.add(new VendasPanel(),      "Vendas");
         painelConteudo.add(new FuncionariosPanel(),"Pessoal");
         painelConteudo.add(new FornecedoresPanel(),"Fornecedores");
+        painelConteudo.add(new SedesPanel(),       "Sede");
+        painelConteudo.add(new FiliaisPanel(),     "Filiais"); 
         add(painelConteudo, BorderLayout.CENTER);
 
         cardLayout.show(painelConteudo, "Dashboard");
@@ -62,10 +64,10 @@ public class AdminFrame extends JFrame {
         sidebar.add(separador());
 
         // Itens de menu
-        String[] itens   = {"Dashboard","Estoque","Vendas","Pessoal","Fornecedores"};
-        String[] icones  = {"⊞","⬜","💰","👤","🏭"};
-        String[] cards   = {"Dashboard","Estoque","Vendas","Pessoal","Fornecedores"};
-
+        String[] itens   = {"Dashboard","Estoque","Vendas","Pessoal","Fornecedores","Sede","Filiais"};
+        String[] icones  = {"⊞","⬜","💰","👤","🏭","🏛","🏪"};
+        String[] cards   = {"Dashboard","Estoque","Vendas","Pessoal","Fornecedores","Sede","Filiais"};
+        
         btnAtivo = null;
         for (int i = 0; i < itens.length; i++) {
             final String card = cards[i];
@@ -126,7 +128,7 @@ public class AdminFrame extends JFrame {
     private void setAtivo(JButton btn) {
         btnAtivo = btn;
         btn.setForeground(Cores.BRANCO);
-        btn.repaint();
+        btn.getParent().repaint();
     }
 
     private JSeparator separador() {
